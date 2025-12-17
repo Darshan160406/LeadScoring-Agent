@@ -1,416 +1,245 @@
-# Lead Scoring Agent – Business Development Demo
+Lead Scoring Agent – Business Development Demo
 
-**🔗 [Live Demo](https://7tc5hgbwv5s999gq5mjtxb.streamlit.app)** | **📂 [GitHub Repository](https://github.com/Darshan160406/LeadScoring-Agent)**
+Live Demo: https://7tc5hgbwv5s999gq5mjtxb.streamlit.app
 
----
+GitHub Repository: https://github.com/Darshan160406/LeadScoring-Agent
 
-## Overview
+Overview
 
-This project is a lead prioritization demo built for a business development use case in the life sciences / 3D in-vitro research space.
+This project is a lead-prioritization demo built for a business development use case in the life sciences / 3D in-vitro research space.
 
-The objective is to help BD teams answer a very practical question:
+The goal is to answer a very practical BD question:
 
-> Given a list of researchers and biotech professionals, who should we reach out to first — and why?
+Given a list of researchers and biotech professionals, who should we contact first — and why?
 
-Instead of focusing on scraping tricks or heavy automation, this demo focuses on decision logic: how multiple weak signals can be combined into a clear, explainable ranking.
+Instead of focusing on live scraping or automation complexity, this demo focuses on decision logic and explainability, which is the core challenge in real BD workflows.
 
----
+Problem Context
 
-## Quick Look
+Business development teams typically work with raw lead lists from:
 
-```
-Input (50 leads)  →  Enrichment  →  Scoring  →  Output (Ranked CSV)
-                      (5 signals)     (0-100)     
-```
+LinkedIn searches
 
-**Example Output:**
+Conference attendee lists
 
-| Rank | Score | Name | Title | Company | Why High Score? |
-|------|-------|------|-------|---------|-----------------|
-| 1 | 95 | Dr. Sarah Johnson | Director of Toxicology | Pfizer | Senior role + Cambridge hub + Recent DILI publication + Big pharma |
-| 2 | 87 | Dr. Emily Rodriguez | Head of Preclinical Safety | Moderna | Senior role + Boston hub + Series B funding + Relevant tech |
-| 15 | 43 | John Smith | Research Associate | Small Startup | Junior role + Remote location + No publications + Bootstrapped |
+Publication databases
 
----
-
-## Problem Context
-
-Business development teams usually work with raw lead lists coming from:
-
-- LinkedIn searches
-- Conference attendee lists
-- Publication databases
-- CRM exports
+CRM exports
 
 These lists are large, flat, and noisy.
-Not every "Director" is equally relevant, and not every researcher is ready to engage.
+Not every “Director” is equally relevant, and not every researcher is ready to engage.
 
-In practice, BD prioritization depends on factors like:
+In practice, BD prioritization depends on signals such as:
 
-- Seniority and role influence
-- Active research relevance
-- Company maturity and funding
-- Geographic ecosystem
-- Exposure to adjacent technologies
+Role seniority and influence
 
-This project turns those considerations into a structured scoring system.
+Relevance of current research
 
----
+Company maturity and readiness
 
-## High-Level Approach
+Geographic ecosystem
+
+Exposure to adjacent technologies
+
+This project converts those signals into a structured and explainable scoring system.
+
+High-Level Approach
 
 The system follows a simple three-stage flow:
 
-**Identify → Enrich → Rank**
+Identify → Enrich → Rank
 
-### 1. Identify
+1. Identify
 
 Leads are provided through a CSV file.
 This mirrors real workflows where data is exported from LinkedIn, conferences, or internal tools.
 
 Each lead includes:
 
-- Name
-- Title
-- Company
-- Person location
-- Company HQ
-- Research keywords
+Name
 
----
+Title
 
-### 2. Enrich
+Company
 
-Each lead is enriched using rule-based, explainable signals:
+Person location
 
-**Role fit**  
+Company HQ
+
+Research keywords
+
+2. Enrich
+
+Each lead is enriched using rule-based, transparent signals:
+
+Role fit
 Senior roles (Director, Head, VP) score higher than individual contributors.
 
-**Scientific intent**  
+Scientific intent
 Keywords related to toxicology, DILI, preclinical safety, and 3D in-vitro models.
 
-**Company intent**  
-Company maturity inferred from funding stage or size.
+Company intent
+Company maturity inferred from size or known funding stage.
 
-**Technographic fit**  
-Indications of exposure to in-vitro, organ-on-chip, or preclinical platforms.
+Technographic fit
+Exposure to in-vitro, organ-on-chip, or preclinical platforms.
 
-**Location signal**  
+Location signal
 Presence in major biotech hubs.
 
-Each signal contributes both a numeric factor and a human-readable reason.
+Each signal contributes:
 
----
+a numeric score component
 
-### 3. Rank
+a human-readable explanation
 
-- Signals are combined into a 0–100 probability score
-- Weights are adjustable via the UI to reflect different BD strategies
-- Leads are ranked by score
-- Each row includes score drivers explaining why the lead ranked where it did
+3. Rank
 
-The goal is transparency, not a black-box model.
+All enrichment signals are combined into a 0–100 probability score.
 
----
+Weights are adjustable through the UI
 
-## Why This Demo Uses Static Data
+Leads are ranked by score
 
-The assignment asked for a "web agent/crawler."
+Each lead includes score drivers explaining why it ranked where it did
 
-In production, this system would scrape:
-- **LinkedIn Sales Navigator** (job titles, locations, company info)
-- **PubMed** (recent publications by author name)
-- **Crunchbase** (funding rounds, company status)
-- **Conference sites** (SOT, AACR attendee lists)
+The emphasis is on transparency and trust, not black-box scoring.
 
-**For this demo, I chose to use curated sample data because:**
-
-1. **Evaluatable** - You can run it instantly without API keys
-2. **Reproducible** - Results are consistent across runs  
-3. **Focused** - Shows the scoring logic without scraping noise
-4. **Honest** - No fake automation claims
-
-The code architecture (`enrichment.py`, `scoring.py`) is designed for production API integration. See `production_integration.md` for complete implementation examples with working code.
-
-This approach lets you evaluate the **business logic** (which is the hard part) without dealing with rate limits, CAPTCHAs, or API costs.
-
-### Production Implementation
-
-The repository includes:
-- **`enrichment.py`** - Contains commented-out production API calls
-- **`production_integration.md`** - Complete setup guide with code examples for:
-  - Proxycurl (LinkedIn scraping)
-  - Bio.Entrez (PubMed integration)
-  - Crunchbase API (funding data)
-  - Selenium (conference scraping)
-
-Estimated production cost: ~$350-500/month for 10,000 leads/month
-
----
-
-## Dashboard
+Dashboard
 
 The Streamlit dashboard allows users to:
 
-- Adjust scoring weights in real time
-- See leads re-rank instantly
-- Understand why a lead scored high or low
-- Export the ranked results as CSV
+Adjust scoring weights in real time
 
-The output is meant to be directly usable by a BD team.
+See leads re-rank instantly
 
----
+Understand why a lead scored high or low
 
-## Input and Output
+Export the ranked results as CSV
 
-### Input
+The output is designed to be directly usable by a BD team.
 
-**File:** `data/input_leads.csv`
+Input and Output
+Input
 
-This file represents identified leads from sources like LinkedIn or conferences.
+File: data/input_leads.csv
 
-Required columns:
-- Name
-- Title
-- Company
-- Location
-- LinkedIn (optional)
+Curated, realistic sample data representing leads from LinkedIn or conferences.
 
----
+Output
 
-### Output
-
-**Generated file:** `ranked_leads.csv`
+Generated file: ranked_leads.csv
 
 Includes:
 
-- Rank
-- Probability score (0–100)
-- Name, title, company
-- Person location and company HQ
-- Email (heuristically inferred)
-- Phone (generated)
-- Recent publications status
-- Company funding stage
-- LinkedIn search link
-- Score breakdown
+Rank
 
----
+Probability score (0–100)
 
-## About Email and LinkedIn Fields
+Name, title, company
+
+Person location and company HQ
+
+Email (heuristically inferred)
+
+LinkedIn search link
+
+Suggested action
+
+Score drivers
+
+About Email and LinkedIn Fields
 
 Email addresses are inferred using a simple pattern (first.last@company.com) for demo purposes.
 
 LinkedIn links are generated as search URLs, not scraped profiles.
 
-This avoids false claims while still matching real BD workflows.
+This avoids false claims while still reflecting real BD workflows.
 
----
+Demo vs Real-World Usage
 
-## Demo vs Production
+This repository runs in demo mode.
 
-This repository runs in **demo mode**.
+Demo mode
 
-### Demo mode
+Curated input data
 
-✅ Curated sample data  
-✅ Simulated enrichment  
-✅ No API keys required  
-✅ Fully reproducible  
-✅ Focus on ranking logic  
+Simulated enrichment
 
-### Production mode (conceptual)
+No API keys required
 
-In a production setup, the same pipeline could integrate with:
+Fully reproducible
 
-- **LinkedIn** (via Proxycurl or Apify)
-- **PubMed** (E-utilities API)
-- **Crunchbase** (funding data API)
-- **Conference systems** (web scraping or partner data)
+Focus on ranking logic
 
-Production integration points are documented in `production_integration.md` but intentionally disabled here to keep evaluation simple.
+Real-world usage (conceptual)
 
----
+In a production setting, the same architecture could integrate with:
 
-## Why Not Machine Learning?
+LinkedIn (via Proxycurl or Apify)
+
+PubMed (E-utilities)
+
+Crunchbase (funding intelligence)
+
+Conference attendee data
+
+These integrations are documented separately but intentionally disabled here to keep evaluation simple.
+
+Why Not Machine Learning?
 
 Early-stage BD problems usually lack:
 
-- Clean labeled outcomes
-- Stable definitions of "success"
-- Sufficient historical data
+Clean labeled outcomes
 
-In such cases, transparent heuristics are more useful than opaque models because teams need to:
+Stable definitions of “success”
 
-- Trust the ranking
-- Explain it internally
-- Adjust priorities quickly
+Sufficient historical data
 
-Machine learning can be added later once real outcome data exists.
+In such cases, transparent heuristics are more effective because teams need to:
 
----
+Trust the ranking
 
-## Tech Stack
+Explain it internally
 
-- Python
-- Pandas
-- Streamlit
+Adjust priorities quickly
 
-Chosen for simplicity, clarity, and ease of review.
+Machine learning can be added later once outcome data exists.
 
----
+Tech Stack
 
-## Running the Project Locally
+Python
 
-```bash
-# Clone the repository
-git clone https://github.com/Darshan160406/LeadScoring-Agent.git
-cd LeadScoring-Agent
+Pandas
 
-# Create virtual environment (optional but recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+Streamlit
 
-# Install dependencies
+Chosen for simplicity, clarity, and ease of evaluation.
+
+Running the Project Locally
 pip install -r requirements.txt
+python -m streamlit run app.py
 
-# Run the application
-streamlit run app.py
-```
 
-The app will open at `http://localhost:8501`
+The app will open at http://localhost:8501.
 
-### Quick Test
+What This Demo Demonstrates
 
-1. Click **"Load Sample Data"** in the sidebar
-2. Adjust scoring weights to see re-ranking
-3. Use search and filters
-4. Download CSV to see complete output
+Business-oriented thinking, not just coding
 
----
+Ability to structure ambiguous requirements
 
-## File Structure
+Clean separation of enrichment, scoring, and UI logic
 
-```
-LeadScoring-Agent/
-├── app.py                      # Main Streamlit dashboard
-├── scoring.py                  # Scoring algorithm (0-100 calculation)
-├── enrichment.py               # Data enrichment logic
-├── requirements.txt            # Python dependencies
-├── README.md                   # This file
-├── production_integration.md   # Production API integration guide
-└── data/
-    └── input_leads.csv        # Sample lead data
-```
+Honest assumptions and explainable trade-offs
 
----
+Final Note
 
-## Business Use Cases
+This project is not a crawler or a CRM replacement.
 
-### Scenario 1: New Product Launch
-**Goal:** Find early adopters for a new 3D liver toxicity assay
+It is a decision-support prototype showing how lead prioritization can be made structured, explainable, and actionable in a life-science BD context.
 
-**Workflow:**
-1. Upload LinkedIn search results: "Director of Toxicology" + biotech hubs
-2. Adjust weights: Publications +50%, Location +15%
-3. Filter: Score ≥ 75, Recent publications = Yes
-4. **Output:** 23 high-priority leads for Q1 outreach
+Authenticity Note
 
----
-
-### Scenario 2: Conference Follow-up
-**Goal:** Prioritize 500 SOT conference attendees
-
-**Workflow:**
-1. Upload attendee CSV
-2. Cross-reference publication keywords (DILI, hepatotoxicity)
-3. Filter: Presented posters + Series A/B companies
-4. **Output:** 67 "hot leads" (80+), 180 "warm leads" (60-79)
-
-**Action Plan:**
-- Top 20: Personal email from VP
-- Next 47: Targeted demo invitation
-- Warm leads: Newsletter signup
-
----
-
-### Scenario 3: Territory Assignment
-**Goal:** Divide 1000 leads among 4 regional reps
-
-**Workflow:**
-1. Group by location (East, West, Europe, Other)
-2. Rank within each region
-3. Assign top 250 per rep
-4. Export separate CSVs for CRM import
-
----
-
-## What This Demo Demonstrates
-
-- Understanding of business development decision-making
-- Ability to translate vague requirements into a working system
-- Clear separation of enrichment, scoring, and UI logic
-- Honest assumptions and explainable trade-offs
-- Production-ready architecture (even if running in demo mode)
-
----
-
-## What This Is NOT
-
-This project is not:
-- ❌ A live web scraper (by design)
-- ❌ A CRM replacement
-- ❌ A black-box ML model
-- ❌ A production deployment
-
-It IS:
-- ✅ A decision-support prototype
-- ✅ An explainable scoring system
-- ✅ A demonstration of business logic
-- ✅ A foundation for production implementation
-
----
-
-## Future Enhancements (Production)
-
-- [ ] Live LinkedIn scraping via Proxycurl
-- [ ] PubMed API integration for real publication data
-- [ ] Crunchbase funding intelligence
-- [ ] Salesforce/HubSpot CRM sync
-- [ ] Email verification (NeverBounce, ZeroBounce)
-- [ ] Automated nightly refresh
-- [ ] Multi-user access with role permissions
-- [ ] A/B testing for scoring weights
-- [ ] Machine learning layer (once outcome data exists)
-
----
-
-## License
-
-MIT License - Free to use for evaluation or derivative work.
-
----
-
-## Contact
-
-**Project Author:** Darshan Saravanan  
-**Email:** darshan160406@gmail.com  
-**Phone:** +91 97890 10449  
-**LinkedIn:** https://www.linkedin.com/in/darshannns  
-**GitHub:** https://github.com/Darshan160406  
-**Submission:** akash@euprime.org
-
----
-
-## Final Note
-
-This project is designed to show how lead prioritization can be made structured, explainable, and actionable in a life-science BD context.
-
-The focus is on **decision quality**, not technical complexity.
-
----
-
-✔ **Authenticity Note**
-
-This README is intentionally written in a straightforward, practical tone.  
+This README is intentionally written in a straightforward, practical tone.
 The goal is clarity and reasoning — not marketing polish.
